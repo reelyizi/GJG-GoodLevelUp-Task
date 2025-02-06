@@ -12,12 +12,13 @@ public class TileManager : MonoBehaviour
 
     public TileTypes[] tileTypes;
     [Range(2, 6)] public int tileTypeRange;
+    public int conditionA = 4, conditionB = 7, conditionC = 9;
     private Dictionary<TileBase, TileTypes> tileLookup;
 
     [Range(5, 10)] public int rows = 10;
     [Range(5, 12)] public int cols = 12;
 
-    [Serializable]
+    
     public class Group
     {
         public List<Vector3Int> positions;
@@ -25,7 +26,6 @@ public class TileManager : MonoBehaviour
         public int count;
     }
 
-    [SerializeField] List<Group> groups;
     bool deadlockFlag = true;
 
     void Start()
@@ -65,7 +65,7 @@ public class TileManager : MonoBehaviour
 
     public void UpdateTileGroups()
     {
-        groups = FindAllGroups();
+        List<Group> groups = FindAllGroups();
 
         // If there are not any group, there is a deadlock
         if (deadlockFlag)
@@ -224,9 +224,9 @@ public class TileManager : MonoBehaviour
         {
             if (tileType.defaultTile == originalTile || tileType.conditionalTiles.Contains(originalTile))
             {
-                if (count >= 5) return tileType.conditionalTiles[0];
-                if (count >= 4) return tileType.conditionalTiles[1];
-                if (count >= 3) return tileType.conditionalTiles[2];
+                if (count >= conditionC) return tileType.conditionalTiles[0];
+                if (count >= conditionB) return tileType.conditionalTiles[1];
+                if (count >= conditionA) return tileType.conditionalTiles[2];
                 return tileType.defaultTile;
             }
         }
